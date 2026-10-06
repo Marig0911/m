@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Winter Arc · My Best Version</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f4f0;
+  --surface: #ffffff;
+  --surface2: #f2ede8;
+  --rose: #c9a0a0;
+  --rose-light: #f5eaea;
+  --rose-deep: #a87070;
+  --sage: #8a9e8a;
+  --sage-light: #edf0eb;
+  --sage-deep: #5a7a5a;
+  --mink: #9e8a7e;
+  --mink-light: #f0ebe8;
+  --text: #2c2420;
+  --text-mid: #7a6b65;
+  --text-soft: #b0a09a;
+  --border: rgba(44,36,32,0.08);
+  --border-rose: rgba(180,130,130,0.2);
+  --gold: #c4a55a;
+  --gold-light: #faf5e8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* LAYOUT */
+.app-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  background: var(--text);
+  color: white;
+  padding: 2rem 1.25rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.sidebar-logo em { font-style: italic; color: #e8c8c8; }
+
+.sidebar-dates {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.days-left-box {
+  background: rgba(255,255,255,0.06);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.days-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 300;
+  color: #e8c8c8;
+  line-height: 1;
+}
+.days-label { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+
+.nav-section-label {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 8px;
+  margin-top: 1.25rem;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 2px;
+  transition: all 0.15s;
+}
+.nav-btn:hover { background: rgba(255,255,255,0.08); color: white; }
+.nav-btn.active { background: rgba(201,160,160,0.2); color: #e8c8c8; }
+.nav-icon { font-size: 14px; }
+
+.save-btn-sidebar {
+  margin-top: auto;
+  background: var(--rose);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.save-btn-sidebar:hover { background: var(--rose-deep); }
+.save-btn-sidebar.saved { background: var(--sage); }
+
+/* MAIN */
+.main {
+  padding: 2.5rem 2rem;
+  max-width: 900px;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.1;
+}
+.page-title em { font-style: italic; color: var(--rose-deep); }
+.page-subtitle { font-size: 12px; color: var(--text-soft); margin-top: 4px; letter-spacing: 0.04em; }
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; }
+
+/* WEEK SELECTOR */
+.week-selector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.week-pill {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border-rose);
+  background: white;
+  font-size: 12px;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.week-pill:hover { background: var(--rose-light); color: var(--rose-deep); }
+.week-pill.active { background: var(--rose); border-color: var(--rose); color: white; }
+
+/* CARDS */
+.card {
+  background: var(--surface);
+  border: 0.5px solid var(--border-rose);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.card-sage { background: var(--sage-light); border-color: rgba(138,158,138,0.3); }
+.card-gold { background: var(--gold-light); border-color: rgba(196,165,90,0.25); }
+.card-mink { background: var(--mink-light); border-color: rgba(158,138,126,0.25); }
+.card-dark { background: var(--text); border-color: transparent; color: white; }
+
+.card-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+/* FOOD SECTION */
+.week-food-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.day-col {
+  border: 0.5px solid var(--border-rose);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+.day-col-header {
+  background: var(--rose);
+  color: white;
+  text-align: center;
+  padding: 8px 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.day-col-header.weekend { background: var(--mink); }
+
+.meal-slot {
+  padding: 8px 8px 6px;
+  border-bottom: 0.5px solid var(--border);
+}
+.meal-slot:last-child { border-bottom: none; }
+.meal-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rose);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.meal-label.sage { color: var(--sage-deep); }
+.meal-label.gold { color: var(--gold); }
+.meal-label.mink { color: var(--mink); }
+.meal-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  resize: none;
+  min-height: 36px;
+  line-height: 1.4;
+}
+.meal-input:focus { outline: none; }
+.meal-input::placeholder { color: var(--text-soft); font-style: italic; font-size: 10px; }
+
+/* HABIT TRACKER */
+.habit-grid-header {
+  display: grid;
+  grid-template-columns: 160px repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+.habit-grid-row {
+  display: grid;
+  grid-template-columns: 160px repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 3px;
+  align-items: center;
+}
+.habit-day-label {
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+.habit-name {
+  font-size: 12px;
+  color: var(--text);
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.habit-icon { font-size: 13px; }
+.habit-check-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hcheck {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-rose);
+  background: white;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.15s;
+  position: relative;
+}
+.hcheck:checked { background: var(--rose); border-color: var(--rose); }
+.hcheck:checked::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1;
+}
+.hcheck.sage:checked { background: var(--sage); border-color: var(--sage); }
+.hcheck.gold:checked { background: var(--gold); border-color: var(--gold); }
+
+/* WORKOUT LOG */
+.workout-day-card {
+  background: white;
+  border: 0.5px solid var(--border-rose);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 8px;
+}
+.workout-day-label {
+  font-size: 11px;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.workout-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.workout-row:last-of-type { border-bottom: none; }
+.workout-select {
+  border: none;
+  background: var(--rose-light);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--rose-deep);
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23a87070'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+.workout-select:focus { outline: none; }
+.workout-duration {
+  border: none;
+  background: var(--sage-light);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--sage-deep);
+  font-family: 'DM Sans', sans-serif;
+  width: 70px;
+  text-align: center;
+}
+.workout-duration:focus { outline: none; }
+.workout-duration::placeholder { color: var(--text-soft); }
+.workout-done {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-rose);
+  background: white;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.15s;
+}
+.workout-done:checked { background: var(--sage); border-color: var(--sage); }
+
+.add-workout-btn {
+  background: transparent;
+  border: 1px dashed var(--border-rose);
+  color: var(--text-soft);
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 11px;
+  cursor: pointer;
+  margin-top: 8px;
+  font-family: 'DM Sans', sans-serif;
+}
+.add-workout-btn:hover { background: var(--rose-light); color: var(--rose-deep); border-color: var(--rose); }
+
+/* WEIGHT TRACKER */
+.weight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+.weight-entry {
+  background: white;
+  border: 0.5px solid var(--border-rose);
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.weight-date-label {
+  font-size: 10px;
+  color: var(--text-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.weight-input {
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  text-align: center;
+  width: 100%;
+}
+.weight-input:focus { outline: none; }
+.weight-input::placeholder { color: var(--text-soft); font-size: 20px; }
+.weight-kg { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+.weight-note {
+  border: none;
+  border-top: 0.5px solid var(--border);
+  background: transparent;
+  width: 100%;
+  font-size: 11px;
+  color: var(--text-mid);
+  margin-top: 6px;
+  padding-top: 6px;
+  font-family: 'DM Sans', sans-serif;
+  text-align: center;
+}
+.weight-note:focus { outline: none; }
+.weight-note::placeholder { color: var(--text-soft); font-style: italic; }
+
+/* PROGRESS BAR */
+.arc-progress {
+  background: var(--surface2);
+  border-radius: 20px;
+  height: 6px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.arc-fill {
+  background: linear-gradient(90deg, var(--rose) 0%, var(--gold) 100%);
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.5s ease;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--text);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  z-index: 100;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* QUOTE */
+.quote-block {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.4;
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+.quote-attr {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--text-soft);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+/* DIVIDER */
+.div { height: 0.5px; background: var(--border); margin: 1rem 0; }
+
+/* SUMMARY ROW */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.summary-card {
+  background: white;
+  border: 0.5px solid var(--border-rose);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+.summary-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--rose-deep);
+  line-height: 1;
+}
+.summary-lbl { font-size: 10px; color: var(--text-soft); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
+
+/* SCROLLABLE PANEL */
+.scroll-x { overflow-x: auto; padding-bottom: 8px; }
+
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo"><em>winter arc</em><br>my best version</div>
+    <div class="sidebar-dates">oct 5 → dic 31, 2026</div>
+
+    <div class="days-left-box">
+      <div class="days-num" id="days-left">—</div>
+      <div class="days-label">días restantes</div>
+      <div class="arc-progress" style="margin-top:10px;">
+        <div class="arc-fill" id="arc-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">navegación</div>
+    <button class="nav-btn active" onclick="nav('home',this)"><span class="nav-icon">✦</span> inicio</button>
+    <button class="nav-btn" onclick="nav('food',this)"><span class="nav-icon">🍽</span> comidas</button>
+    <button class="nav-btn" onclick="nav('habits',this)"><span class="nav-icon">✓</span> hábitos</button>
+    <button class="nav-btn" onclick="nav('workouts',this)"><span class="nav-icon">⚡</span> workouts</button>
+    <button class="nav-btn" onclick="nav('weight',this)"><span class="nav-icon">📊</span> peso</button>
+
+    <button class="save-btn-sidebar" id="save-btn" onclick="saveAll()">
+      <span>💾</span> guardar todo
+    </button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- HOME -->
+    <div class="section active" id="sec-home">
+      <div class="page-header">
+        <div class="page-title"><em>winter arc</em></div>
+        <div class="page-subtitle">88 días · oct 5 — dic 31, 2026 · convirtiéndome en mi mejor versión</div>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-card">
+          <div class="summary-num" id="sum-days">—</div>
+          <div class="summary-lbl">días activos</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num" id="sum-habits">—</div>
+          <div class="summary-lbl">hábitos hoy</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num" id="sum-workouts">—</div>
+          <div class="summary-lbl">workouts semana</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num" id="sum-left">—</div>
+          <div class="summary-lbl">días restantes</div>
+        </div>
+      </div>
+
+      <div class="card card-dark">
+        <div class="quote-block" style="color: rgba(255,255,255,0.9);">
+          "she decided to start. quietly, consistently, becoming."
+        </div>
+        <div class="quote-attr" style="color:rgba(255,255,255,0.3); text-align:center;">winter arc · 2025</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+        <div class="card card-sage">
+          <div class="card-label">intención del arc</div>
+          <textarea id="home-intention" style="border:none;background:transparent;width:100%;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);resize:none;min-height:80px;" placeholder="este winter arc quiero lograr..."></textarea>
+        </div>
+        <div class="card card-mink">
+          <div class="card-label">mis palabras del año</div>
+          <textarea id="home-words" style="border:none;background:transparent;width:100%;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);resize:none;min-height:80px;" placeholder="mis palabras guía para estos 90 días..."></textarea>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1rem;">
+        <div class="card-label">nota rápida de hoy</div>
+        <textarea id="home-note" style="border:none;background:transparent;width:100%;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);resize:none;min-height:60px;" placeholder="hoy me propongo..."></textarea>
+      </div>
+    </div>
+
+    <!-- FOOD -->
+    <div class="section" id="sec-food">
+      <div class="page-header">
+        <div class="page-title">comidas <em>semanales</em></div>
+        <div class="page-subtitle">planifica qué comes cada día</div>
+      </div>
+
+      <div class="week-selector" id="food-week-sel"></div>
+
+      <div class="scroll-x">
+        <div class="week-food-grid" id="food-grid" style="min-width: 700px;"></div>
+      </div>
+    </div>
+
+    <!-- HABITS -->
+    <div class="section" id="sec-habits">
+      <div class="page-header">
+        <div class="page-title">habit <em>tracker</em></div>
+        <div class="page-subtitle">checa cada hábito completado</div>
+      </div>
+
+      <div class="week-selector" id="habit-week-sel"></div>
+
+      <div class="card">
+        <div class="habit-grid-header">
+          <div></div>
+          <div class="habit-day-label">L</div>
+          <div class="habit-day-label">M</div>
+          <div class="habit-day-label">X</div>
+          <div class="habit-day-label">J</div>
+          <div class="habit-day-label">V</div>
+          <div class="habit-day-label">S</div>
+          <div class="habit-day-label">D</div>
+        </div>
+        <div id="habit-rows"></div>
+      </div>
+    </div>
+
+    <!-- WORKOUTS -->
+    <div class="section" id="sec-workouts">
+      <div class="page-header">
+        <div class="page-title">mis <em>workouts</em></div>
+        <div class="page-subtitle">registra qué entrenaste cada día</div>
+      </div>
+
+      <div class="week-selector" id="workout-week-sel"></div>
+      <div id="workout-days"></div>
+    </div>
+
+    <!-- WEIGHT -->
+    <div class="section" id="sec-weight">
+      <div class="page-header">
+        <div class="page-title">tracker de <em>peso</em></div>
+        <div class="page-subtitle">registro semanal · para ti, no para el mundo</div>
+      </div>
+
+      <div class="card card-sage" style="margin-bottom:1rem;">
+        <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:var(--sage-deep);">
+          "el número es información, no tu valor. registra con amor."
+        </div>
+      </div>
+
+      <div class="weight-grid" id="weight-grid"></div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast">✓ guardado correctamente</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+const START = new Date(2026, 9, 5);
+const END = new Date(2026, 11, 31);
+const TOTAL_DAYS = Math.round((END - START) / 864e5) + 1;
+
+const HABITS = [
+  { id: 'skincare_am', label: 'skincare am', icon: '🌅', cls: '' },
+  { id: 'skincare_pm', label: 'skincare pm', icon: '🌙', cls: '' },
+  { id: 'crema',       label: 'crema corporal', icon: '✨', cls: '' },
+  { id: 'workout',     label: 'workout', icon: '⚡', cls: 'sage' },
+  { id: 'estirar',     label: 'estirar 10 min', icon: '🤸', cls: 'sage' },
+  { id: 'te',          label: 'té de menta', icon: '🫖', cls: 'gold' },
+  { id: 'dormir',      label: 'dormir temprano', icon: '💤', cls: '' },
+  { id: 'steps',       label: '10k steps', icon: '🚶', cls: 'sage' },
+  { id: 'agua',        label: '8 vasos de agua', icon: '💧', cls: '' },
+];
+
+const MEALS = [
+  { id: 'breakfast', label: 'desayuno', cls: '' },
+  { id: 'snack1',    label: 'snack 1', cls: 'sage' },
+  { id: 'lunch',     label: 'almuerzo', cls: 'gold' },
+  { id: 'snack2',    label: 'snack 2', cls: 'mink' },
+  { id: 'dinner',    label: 'comida', cls: 'mink' },
+];
+
+const WORKOUTS = ['tenis','pádel','pilates','yoga','correr','caminata','spinning','baile','escaladora','cardio','fuerza','abs'];
+
+const WEEK_DAYS = ['L','M','X','J','V','S','D'];
+const DAY_NAMES = ['lun','mar','mié','jue','vie','sáb','dom'];
+
+// ── WEEKS ────────────────────────────────────────────────────
+function makeDay(y, m, d) { return new Date(y, m, d, 12, 0, 0); }
+function addDays(date, n) { return makeDay(date.getFullYear(), date.getMonth(), date.getDate() + n); }
+
+function getWeeks() {
+  const weeks = [];
+  let cur = makeDay(2026, 9, 5);
+  const endSafe = makeDay(2026, 11, 31);
+  while (cur <= endSafe) {
+    const wStart = makeDay(cur.getFullYear(), cur.getMonth(), cur.getDate());
+    const wEnd = addDays(wStart, 6);
+    weeks.push({ start: wStart, end: wEnd <= endSafe ? wEnd : endSafe });
+    cur = addDays(cur, 7);
+  }
+  return weeks;
+}
+const WEEKS = getWeeks();
+
+function fmtDate(d) {
+  return d.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
+}
+
+function weekLabel(w, i) {
+  return `sem ${i+1}`;
+}
+
+// ── STATE ─────────────────────────────────────────────────────
+let data = {};
+function load() {
+  try { data = JSON.parse(localStorage.getItem('winterArc_v2') || '{}'); } catch(e) { data = {}; }
+}
+function saveAll() {
+  // Collect all inputs
+  document.querySelectorAll('[data-key]').forEach(el => {
+    if (el.type === 'checkbox') data[el.dataset.key] = el.checked;
+    else data[el.dataset.key] = el.value;
+  });
+  // Home textareas
+  ['home-intention','home-words','home-note'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) data['home_' + id] = el.value;
+  });
+  localStorage.setItem('winterArc_v2', JSON.stringify(data));
+  const btn = document.getElementById('save-btn');
+  btn.classList.add('saved');
+  btn.innerHTML = '<span>✓</span> guardado';
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+    btn.classList.remove('saved');
+    btn.innerHTML = '<span>💾</span> guardar todo';
+  }, 2500);
+}
+function getVal(key, fallback='') { return data[key] !== undefined ? data[key] : fallback; }
+function getBool(key) { return data[key] === true; }
+
+// ── DAYS COUNTER ──────────────────────────────────────────────
+function updateCounter() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const endD = new Date(END); endD.setHours(0,0,0,0);
+  const left = Math.max(0, Math.round((endD - today) / 864e5));
+  const elapsed = TOTAL_DAYS - left;
+  const pct = Math.min(100, Math.round((elapsed / TOTAL_DAYS) * 100));
+  document.getElementById('days-left').textContent = left;
+  document.getElementById('arc-fill').style.width = pct + '%';
+  document.getElementById('sum-left').textContent = left;
+  document.getElementById('sum-days').textContent = Math.max(0, elapsed);
+}
+
+// ── NAV ───────────────────────────────────────────────────────
+function nav(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── WEEK SELECTOR BUILDER ─────────────────────────────────────
+function buildWeekSel(containerId, activeWeek, onSelect) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  WEEKS.forEach((w, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'week-pill' + (i === activeWeek ? ' active' : '');
+    btn.textContent = weekLabel(w, i) + ' (' + fmtDate(w.start) + ')';
+    btn.onclick = () => {
+      el.querySelectorAll('.week-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      onSelect(i);
+    };
+    el.appendChild(btn);
+  });
+}
+
+// ── FOOD ──────────────────────────────────────────────────────
+let foodWeek = 0;
+function buildFood(wi) {
+  foodWeek = wi;
+  const week = WEEKS[wi];
+  const grid = document.getElementById('food-grid');
+  grid.innerHTML = '';
+  for (let d = 0; d < 7; d++) {
+    const date = addDays(week.start, d);
+    if (date > END) break;
+    const isWeekend = d >= 5;
+    const col = document.createElement('div');
+    col.className = 'day-col';
+    const hdr = document.createElement('div');
+    hdr.className = 'day-col-header' + (isWeekend ? ' weekend' : '');
+    hdr.textContent = DAY_NAMES[d] + ' ' + date.getDate();
+    col.appendChild(hdr);
+    MEALS.forEach(m => {
+      const key = `food_w${wi}_d${d}_${m.id}`;
+      const slot = document.createElement('div');
+      slot.className = 'meal-slot';
+      slot.innerHTML = `<div class="meal-label ${m.cls}">${m.label}</div>
+        <textarea class="meal-input" data-key="${key}" placeholder="escribe aquí..." rows="2">${getVal(key)}</textarea>`;
+      col.appendChild(slot);
+    });
+    grid.appendChild(col);
+  }
+  rebindInputs();
+}
+
+// ── HABITS ────────────────────────────────────────────────────
+let habitWeek = 0;
+function buildHabits(wi) {
+  habitWeek = wi;
+  const week = WEEKS[wi];
+  const container = document.getElementById('habit-rows');
+  container.innerHTML = '';
+  HABITS.forEach(h => {
+    const row = document.createElement('div');
+    row.className = 'habit-grid-row';
+    row.innerHTML = `<div class="habit-name"><span class="habit-icon">${h.icon}</span> ${h.label}</div>`;
+    for (let d = 0; d < 7; d++) {
+      const date = new Date(week.start);
+      date.setDate(date.getDate() + d);
+      if (date > END) { row.innerHTML += '<div></div>'; continue; }
+      const key = `habit_w${wi}_d${d}_${h.id}`;
+      const cell = document.createElement('div');
+      cell.className = 'habit-check-cell';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.className = 'hcheck ' + h.cls;
+      cb.dataset.key = key;
+      cb.checked = getBool(key);
+      cell.appendChild(cb);
+      row.appendChild(cell);
+    }
+    container.appendChild(row);
+    const divRow = document.createElement('div');
+    divRow.style.cssText = 'height:0.5px;background:var(--border);margin:2px 0 4px;';
+    container.appendChild(divRow);
+  });
+  updateHabitCount();
+  rebindInputs();
+}
+
+function updateHabitCount() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dayOfWeek = (today.getDay() + 6) % 7;
+  const weekStart = new Date(today); weekStart.setDate(today.getDate() - dayOfWeek);
+  // Find which week index
+  let wi = 0;
+  WEEKS.forEach((w, i) => {
+    if (w.start <= today && w.end >= today) wi = i;
+  });
+  let count = 0;
+  HABITS.forEach(h => {
+    if (getBool(`habit_w${wi}_d${dayOfWeek}_${h.id}`)) count++;
+  });
+  document.getElementById('sum-habits').textContent = count + '/' + HABITS.length;
+}
+
+// ── WORKOUTS ──────────────────────────────────────────────────
+let workoutWeek = 0;
+function buildWorkouts(wi) {
+  workoutWeek = wi;
+  const week = WEEKS[wi];
+  const container = document.getElementById('workout-days');
+  container.innerHTML = '';
+  for (let d = 0; d < 7; d++) {
+    const date = addDays(week.start, d);
+    if (date > END) break;
+    const card = document.createElement('div');
+    card.className = 'workout-day-card';
+    const dateStr = date.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+    const countKey = `workout_w${wi}_d${d}_count`;
+    const count = parseInt(getVal(countKey, '1'));
+    card.innerHTML = `<div class="workout-day-label"><span>${dateStr}</span></div>`;
+    const rows = document.createElement('div');
+    rows.id = `wrows_${wi}_${d}`;
+    for (let r = 0; r < Math.max(1, count); r++) {
+      rows.appendChild(makeWorkoutRow(wi, d, r));
+    }
+    card.appendChild(rows);
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-workout-btn';
+    addBtn.textContent = '+ agregar ejercicio';
+    addBtn.dataset.wi = wi; addBtn.dataset.d = d;
+    addBtn.onclick = function() {
+      const wi2 = parseInt(this.dataset.wi), d2 = parseInt(this.dataset.d);
+      const rowsEl = document.getElementById(`wrows_${wi2}_${d2}`);
+      const newIdx = rowsEl.children.length;
+      data[`workout_w${wi2}_d${d2}_count`] = newIdx + 1;
+      rowsEl.appendChild(makeWorkoutRow(wi2, d2, newIdx));
+      rebindInputs();
+    };
+    card.appendChild(addBtn);
+    container.appendChild(card);
+  }
+
+  // Count workouts this week
+  let wcount = 0;
+  for (let d = 0; d < 7; d++) {
+    if (getBool(`habit_w${wi}_d${d}_workout`)) wcount++;
+  }
+  document.getElementById('sum-workouts').textContent = wcount;
+  rebindInputs();
+}
+
+function makeWorkoutRow(wi, d, r) {
+  const typeKey = `workout_w${wi}_d${d}_r${r}_type`;
+  const durKey  = `workout_w${wi}_d${d}_r${r}_dur`;
+  const doneKey = `workout_w${wi}_d${d}_r${r}_done`;
+  const div = document.createElement('div');
+  div.className = 'workout-row';
+  const sel = document.createElement('select');
+  sel.className = 'workout-select';
+  sel.dataset.key = typeKey;
+  sel.innerHTML = '<option value="">elegir...</option>' + WORKOUTS.map(w => `<option value="${w}" ${getVal(typeKey)===w?'selected':''}>${w}</option>`).join('');
+  const dur = document.createElement('input');
+  dur.type = 'text'; dur.className = 'workout-duration';
+  dur.dataset.key = durKey; dur.value = getVal(durKey);
+  dur.placeholder = '45 min';
+  const done = document.createElement('input');
+  done.type = 'checkbox'; done.className = 'workout-done';
+  done.dataset.key = doneKey; done.checked = getBool(doneKey);
+  div.appendChild(sel); div.appendChild(dur); div.appendChild(done);
+  return div;
+}
+
+// ── WEIGHT ────────────────────────────────────────────────────
+function buildWeight() {
+  const grid = document.getElementById('weight-grid');
+  grid.innerHTML = '';
+  // One entry per week
+  WEEKS.forEach((w, i) => {
+    const entry = document.createElement('div');
+    entry.className = 'weight-entry';
+    const valKey = `weight_w${i}`;
+    const noteKey = `weight_w${i}_note`;
+    entry.innerHTML = `
+      <div class="weight-date-label">${weekLabel(w,i)}<br>${fmtDate(w.start)}</div>
+      <input class="weight-input" type="text" data-key="${valKey}" value="${getVal(valKey)}" placeholder="—">
+      <div class="weight-kg">kg</div>
+      <input class="weight-note" type="text" data-key="${noteKey}" value="${getVal(noteKey)}" placeholder="cómo me sentí...">
+    `;
+    grid.appendChild(entry);
+  });
+  rebindInputs();
+}
+
+// ── REBIND AUTO-SAVE (on blur) ────────────────────────────────
+function rebindInputs() {
+  document.querySelectorAll('[data-key]').forEach(el => {
+    el.onchange = null;
+    if (el.type === 'checkbox') {
+      el.onchange = () => { data[el.dataset.key] = el.checked; };
+    } else {
+      el.onblur = () => { data[el.dataset.key] = el.value; };
+    }
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+load();
+updateCounter();
+
+// Home textareas restore
+['home-intention','home-words','home-note'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el && data['home_' + id]) el.value = data['home_' + id];
+  if (el) el.onblur = () => { data['home_' + id] = el.value; };
+});
+
+// Today's week index
+const today = new Date(); today.setHours(0,0,0,0);
+let todayWeek = 0;
+WEEKS.forEach((w,i) => { if (w.start <= today && w.end >= today) todayWeek = i; });
+
+// Build week selectors
+buildWeekSel('food-week-sel', todayWeek, wi => buildFood(wi));
+buildWeekSel('habit-week-sel', todayWeek, wi => buildHabits(wi));
+buildWeekSel('workout-week-sel', todayWeek, wi => buildWorkouts(wi));
+
+// Build views
+buildFood(todayWeek);
+buildHabits(todayWeek);
+buildWorkouts(todayWeek);
+buildWeight();
+
+// Keyboard save shortcut
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); saveAll(); }
+});
+</script>
+</body>
+</html>
